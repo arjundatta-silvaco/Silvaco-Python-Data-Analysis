@@ -1,0 +1,171 @@
+#Defining Variables
+set chan_len = 0.5
+
+set sd_thick = 0.05
+set gate_thick = 0.05
+set ox_time = 13
+
+set junc_dep = 0.3
+set drive_time = 7
+
+set chan_doping = 5E15
+set elec_doping = 1E18
+
+set file = $chan_len * 2
+
+set alpha = 2
+set beta = 1.2
+set delta = 1.8
+
+#Loop initialize
+loop steps = 5
+
+go athena
+
+#Mesh definition
+line x loc = 0 spac=0.1
+line x loc = $chan_len / 3 spac= ($chan_len / 10)
+line x loc = $chan_len / 2 spac= ($chan_len / 15)
+line x loc = $chan_len / 1.5 spac= ($chan_len / 25)
+line x loc = $chan_len spac = ($chan_len / 50)
+line x loc = $chan_len + ($chan_len * 0.25) spac = ($chan_len / 50)
+line x loc = $chan_len + ($chan_len * 0.5) spac = ($chan_len / 50)
+line x loc = $chan_len + ($chan_len * 0.75) spac = ($chan_len / 50)
+line x loc = $chan_len * 2 spac = ($chan_len / 50)
+
+line y loc = 0 spac = 0.01
+line y loc = $junc_dep / 2 spac=0.01
+line y loc = $junc_dep spac=0.01
+line y loc = 0.5 spac=0.05
+
+#Initializing substrate
+init silicon c.boron=$chan_doping orientation=100 two.d
+
+#Oxidation of Gate Oxide 
+diffus time=$ox_time minutes temp=1000 dryo2 press=1
+
+#Etch oxide for well formation
+etch oxide left p1.x = $chan_len
+
+#Photoresist for masking oxide
+deposit photoresist thick=0.7 div =24 spac=20
+etch photoresist left p1.x = $chan_len - 0.015
+
+#N-Well Formation
+implant phosphor dose=$elec_doping energy=3 tilt=0 rotation=0 crystal
+
+#Removing photoresist
+etch photoresist all
+
+#Well drive-in
+diffus time=$drive_time minutes temp=700 nitro press=1
+
+#Gate Deposition
+deposit titanium thick=$gate_thick div=24 spac=50
+
+etch titanium left p1.x = $chan_len
+
+#Source/Drain deposition
+deposit aluminum thick=$sd_thick div=24 spac=50
+
+etch aluminum right p1.x = $chan_len - ($chan_len / 2)
+
+#Spacer
+deposit nitride thick=$gate_thick + 0.01 div=24 spac=50
+
+etch nitride dry thick = $gate_thick +0.015
+
+etch nitride left p1.x = $chan_len - ($chan_len / 3)
+
+struct mirror right
+
+#Defining electrodes
+electrode name=gate x = $chan_len y = -0.001
+electrode name=drain x = 0 y = -0.001
+electrode name=source x = $chan_len * 4 y = -0.001
+
+#struct outf = scale_'$file'.str
+struct outf= scale_init.str
+
+#l.end
+
+#tonyplot scale_'1'.str scale_'0.5'.str scale_'0.25'.str scale_'0.125'.str scale_'0.0625'.str
+
+#quit
+
+go atlas simflags = "-P 8"
+
+mesh infile = scale_init.str
+
+models srh fermi fldmob conmob cvt temp=300 print
+output band.param val.band con.band e.field
+
+contact name=gate neutral
+contact name=drain neutral
+contact name=source neutral
+
+method newton itlimit = 10
+
+solve init
+
+#Transfer characteristics at drain voltage = 5V
+solve vdrain = 0 vstep = 0.5 vfinal = 5 name = drain
+solve vgate = 0 vstep = -0.2 vfinal = -1 name = gate
+
+log outf = scl_'$file'_vg_vd_5.dat
+solve vgate = -1 vstep = 0.2 vfinal = 5 name = gate
+log off
+
+struct outf = scl_'$file'_vg_sweep_at_vd_5V.str
+
+#Output Characteristics
+solve init
+
+log outf = scl_'$file'_vd_out_at_vg_00V.dat
+solve vdrain =0 vstep = 0.5 vfinal = 5 name = drain
+log off
+
+solve init
+solve vgate = 0 vstep = 0.1 vfinal = 0.3 name = gate
+
+log outf = scl_'$file'_vd_out_at_vg_03V.dat
+solve vdrain = 0 vstep = 0.5 vfinal = 5 name = drain
+log off
+
+solve init
+solve vgate = 0 vstep = 0.1 vfinal = 0.6 name = gate
+
+log outf = scl_'$file'_vd_out_at_vg_06V.dat
+solve vdrain =0 vstep = 0.5 vfinal = 5 name = drain
+log off
+
+solve init
+solve vgate = 0 vstep = 0.1 vfinal = 0.9 name = gate
+
+log outf = scl_'$file'_vd_out_at_vg_09V.dat
+solve vdrain =0 vstep = 0.5 vfinal = 5 name = drain
+log off
+
+solve init
+solve vgate = 0 vstep = 0.1 vfinal = 1.2 name = gate
+
+log outf = scl_'$file'_vd_out_at_vg_12V.dat
+solve vdrain =0 vstep = 0.5 vfinal = 5 name = drain
+log off
+
+#Progressing variables
+set chan_len = $chan_len / $alpha
+set sd_thick = $sd_thick / $delta
+set gate_thick = $gate_thick / $beta
+set ox_time = $ox_time / $beta
+set drive_time = $drive_time / $alpha
+set junc_dep = $junc_dep / $beta
+set chan_doping = $chan_doping * $delta
+set elec_doping = $elec_doping * $delta
+set file = $file / 2
+
+l.end
+
+tonyplot scl_1_vg_sweep_at_vd_5V.str scl_0.5_vg_sweep_at_vd_5V.str scl_0.25_vg_sweep_at_vd_5V.str scl_0.125_vg_sweep_at_vd_5V.str scl_0.0625_vg_sweep_at_vd_5V.str 
+quit
+
