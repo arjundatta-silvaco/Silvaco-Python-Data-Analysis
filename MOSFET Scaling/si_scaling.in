@@ -84,16 +84,13 @@ electrode name=gate x = $chan_len y = -0.001
 electrode name=drain x = 0 y = -0.001
 electrode name=source x = $chan_len * 4 y = -0.001
 
-#struct outf = scale_'$file'.str
 struct outf= scale_init.str
 
-#l.end
+#Do not forget to change number of processors used by atlas.
+#Just change all into an integer (1, 2, 3,... all).
+#All is the maximum number of processors in your CPU.
 
-#tonyplot scale_'1'.str scale_'0.5'.str scale_'0.25'.str scale_'0.125'.str scale_'0.0625'.str
-
-#quit
-
-go atlas simflags = "-P 8"
+go atlas simflags = "-P all"
 
 mesh infile = scale_init.str
 
