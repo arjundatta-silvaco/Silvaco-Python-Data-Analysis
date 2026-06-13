@@ -1,0 +1,101 @@
+# In file 1 is without modulation, 2 is with modulation
+
+#Initialize variables
+set mod_dop = 1
+set file = 1
+set xmax = 0.8
+set interface = 0.03
+
+#Loop begin
+loop steps=2
+
+go atlas simflags = "-P 8"
+
+mesh
+
+x.mesh loc = 0 spac = 1* 0.05
+x.mesh loc = $xmax spac = 1* 0.05
+
+y.mesh loc = 0 spac = 1* 0.01
+y.mesh loc = 0.01 spac = 1* 0.01
+y.mesh loc = 0.02 spac = 1* 0.005
+y.mesh loc = $interface spac = 0.1* 0.001
+y.mesh loc = $interface + 0.01 spac = 0.1* 0.001
+y.mesh loc = $interface + 0.02 spac = 0.1* 0.001
+y.mesh loc = $interface + 0.04 spac = 0.1* 0.01
+y.mesh loc = 0.1 spac = 10* 0.01
+
+#Defining regions
+region number = 1 y.min = 0 y.max = 0.01 x.max = $xmax x.min = 0 material = nitride
+region number = 2 y.min = 0.01 y.max = $interface x.max = $xmax x.min = 0 material = algaas x.comp = 0.3
+region number = 3 y.min = $interface y.max = $interface + 0.02 x.max = $xmax x.min = 0 material = gaas
+region number = 4 y.min = $interface + 0.02 y.max = 0.1 x.max = $xmax x.min = 0 material = gaas
+
+#Electrodes
+electrode number = 1 name = drain x.min = 0 x.max = $xmax/8 y.min = 0 y.max = 0.01
+electrode number = 2 name = gate x.min = ($xmax / 2) - ($xmax/6) x.max = ($xmax / 2) + ($xmax/6) y.min = 0 y.max = 0.01
+electrode number = 3 name = source x.min = $xmax - ($xmax/8) x.max = $xmax y.min = 0 y.max = 0.01
+
+#Doping
+doping y.min = 0.01 y.max = $interface x.max = $xmax x.min = 0 uniform n.type conc = $mod_dop
+
+#Material parameters
+material material=GaAs mun=6500 taurel.el=1.e-12 taumob.el=1.e-12 vsat=1.e7
+material material=AlGaAs mun=2000 taurel.el=1.e-12 taumob.el=1.e-12 align=0.7
+
+models srh fldmob fermi conmob temp=300 print
+
+contact name=gate workfunction = 4.73
+contact name=drain neutral
+contact name=source neutral
+
+#Begin characterization
+method newton itlim=20 trap  maxtrap=6  
+output con.band val.band e.mobility h.mobility band.param e.field
+solve init
+solve vgate=0
+
+save outf = mod_idvd_init_'$file'.str
+
+#Output characteristics
+log outf = mod_idvd_'$file'.dat  master
+solve vdrain=0.003125
+solve vdrain=0.00625
+solve vdrain=0.0125
+solve vdrain = 0.025
+solve vdrain=0.05
+solve vdrain=0.10 
+solve vdrain=0.125 
+solve vdrain=0.15 
+solve vdrain=0.20 
+solve vdrain=0.30
+solve vdrain=0.50  vstep=0.25  name=drain vfinal=3
+log off
+save outf = mod_idvd_3_'$file'.str
+
+#Transfer characteristics
+method  newton trap itlim=20  maxtrap=6
+solve init
+solve vgate=-0.9 vdrain=0
+solve vdrain=0.003125
+solve vdrain=0.00625
+solve vdrain=0.0125
+solve vdrain = 0.025
+solve vdrain=0.05
+solve vdrain=0.1
+
+log outf = mod_idvg_02_'$file'.dat master
+method  newton trap itlim=20 maxtrap=6
+solve vgate=-0.8  vstep=0.1  name=gate vfinal=0.2
+log off
+save outf = mod_idvg_02_'$file'.str
+
+#Variable progression
+set mod_dop = $mod_dop + 4E18
+set file = $file + 1
+
+l.end
+
+tonyplot mod_idvd_init_1.str mod_idvd_init_2.str
+
+quit
