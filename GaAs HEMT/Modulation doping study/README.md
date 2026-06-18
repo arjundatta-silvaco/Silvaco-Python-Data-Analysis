@@ -22,4 +22,5 @@ Use origin for the file 'gaas_hemt_mod_doping.opju'
 Scripts for plotting and analyzing Silvaco simulation outputs.
 
 characteristics.py --> Both output and transfer characteristics are included in one python file. Threshold voltage is printed in output window.
+
 energy_band.py --> Code for getting the energy band plots from doped_energy_band1.dat and undoped_energy_band1.dat
