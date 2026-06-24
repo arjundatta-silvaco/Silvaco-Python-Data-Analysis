@@ -1,5 +1,7 @@
 # Welcome to using Python to analyze Silvaco I-V characteristics.
 
+## License Notice: This repository is provided for personal study and educational reference. Research publication, commercial use, redistribution, and reuse of repository contents require prior permission. See the LICENSE file for details.
+
 Tonyplot is a pain to use for multiple files, so why not use an easier way.
 
 ## Steps to utilize repo contents
