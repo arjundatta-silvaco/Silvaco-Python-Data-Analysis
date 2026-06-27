@@ -12,7 +12,7 @@ Absence of modulation doping shows drain current of the magnitude 1E-17, only no
 3) Do to file and click export
 4) Select displayed only and tonyplot user data
 5) Change the name of the file from the default 'export' to a desired name
-6) Put the name of file in energy_band.py pyhton code
+6) Put the name of file in energy_band.py python code
 
 # Electron concentration Origin Plot
 Use origin for the file 'gaas_hemt_mod_doping.opju'
