@@ -5,11 +5,12 @@ set sd_thick = 0.05
 set gate_thick = 0.05
 set ox_time = 13
 
-set junc_dep = 0.3
+set junc_dep = 0.5
 set drive_time = 7
+set energy = 10
 
 set chan_doping = 5E15
-set elec_doping = 1E18
+set elec_doping = 5E12
 
 set file = $chan_len * 2
 
@@ -36,7 +37,6 @@ line x loc = $chan_len * 2 spac = ($chan_len / 50)
 line y loc = 0 spac = 0.01
 line y loc = $junc_dep / 2 spac=0.01
 line y loc = $junc_dep spac=0.01
-line y loc = 0.5 spac=0.05
 
 #Initializing substrate
 init silicon c.boron=$chan_doping orientation=100 two.d
@@ -52,7 +52,7 @@ deposit photoresist thick=0.7 div =24 spac=20
 etch photoresist left p1.x = $chan_len - 0.015
 
 #N-Well Formation
-implant phosphor dose=$elec_doping energy=3 tilt=0 rotation=0 crystal
+implant phosphor dose=$elec_doping energy=$energy tilt=0 rotation=0 crystal
 
 #Removing photoresist
 etch photoresist all
@@ -84,13 +84,10 @@ electrode name=gate x = $chan_len y = -0.001
 electrode name=drain x = 0 y = -0.001
 electrode name=source x = $chan_len * 4 y = -0.001
 
+#For Atlas
 struct outf= scale_init.str
 
-#Do not forget to change number of processors used by atlas.
-#Just change all into an integer (1, 2, 3,... all).
-#All is the maximum number of processors in your CPU.
-
-go atlas simflags = "-P all"
+go atlas simflags = "-P 8"
 
 mesh infile = scale_init.str
 
@@ -105,12 +102,29 @@ method newton itlimit = 10
 
 solve init
 
-#Transfer characteristics at drain voltage = 5V
-solve vdrain = 0 vstep = 0.5 vfinal = 5 name = drain
-solve vgate = 0 vstep = -0.2 vfinal = -1 name = gate
+#Initial Structure
+struct outf = scl_init_'$file'.str
+
+#Transfer characteristics at drain voltage = 3V
+solve vdrain=0.003125
+solve vdrain=0.00625
+solve vdrain=0.0125
+solve vdrain = 0.025
+solve vdrain=0.05
+solve vdrain=0.10 
+solve vdrain=0.125 
+solve vdrain=0.15 
+solve vdrain=0.20 
+solve vdrain=0.30
+solve vdrain = 0.5 vstep = 0.5 vfinal = 3 name = drain
+
+#For DIBL showcase
+struct outf = scl_'$file'_vd_3V.str
+
+solve vgate = 0 vstep = -0.1 vfinal = -0.4 name = gate
 
 log outf = scl_'$file'_vg_vd_5.dat
-solve vgate = -1 vstep = 0.2 vfinal = 5 name = gate
+solve vgate = -0.4 vstep = 0.1 vfinal = 5 name = gate
 log off
 
 struct outf = scl_'$file'_vg_sweep_at_vd_5V.str
@@ -119,35 +133,75 @@ struct outf = scl_'$file'_vg_sweep_at_vd_5V.str
 solve init
 
 log outf = scl_'$file'_vd_out_at_vg_00V.dat
-solve vdrain =0 vstep = 0.5 vfinal = 5 name = drain
+solve vdrain=0.003125
+solve vdrain=0.00625
+solve vdrain=0.0125
+solve vdrain = 0.025
+solve vdrain=0.05
+solve vdrain=0.10
+solve vdrain=0.20 
+solve vdrain=0.30
+solve vdrain =0.5 vstep = 0.5 vfinal = 5 name = drain
 log off
 
 solve init
-solve vgate = 0 vstep = 0.1 vfinal = 0.3 name = gate
+solve vgate = 0 vstep = 0.1 vfinal = 0.5 name = gate
 
-log outf = scl_'$file'_vd_out_at_vg_03V.dat
-solve vdrain = 0 vstep = 0.5 vfinal = 5 name = drain
+log outf = scl_'$file'_vd_out_at_vg_05V.dat
+solve vdrain=0.003125
+solve vdrain=0.00625
+solve vdrain=0.0125
+solve vdrain = 0.025
+solve vdrain=0.05
+solve vdrain=0.10
+solve vdrain=0.20 
+solve vdrain=0.30
+solve vdrain = 0.5 vstep = 0.5 vfinal = 5 name = drain
 log off
 
 solve init
-solve vgate = 0 vstep = 0.1 vfinal = 0.6 name = gate
+solve vgate = 0 vstep = 0.1 vfinal = 1 name = gate
 
-log outf = scl_'$file'_vd_out_at_vg_06V.dat
-solve vdrain =0 vstep = 0.5 vfinal = 5 name = drain
+log outf = scl_'$file'_vd_out_at_vg_10V.dat
+solve vdrain=0.003125
+solve vdrain=0.00625
+solve vdrain=0.0125
+solve vdrain = 0.025
+solve vdrain=0.05
+solve vdrain=0.10
+solve vdrain=0.20 
+solve vdrain=0.30
+solve vdrain =0.5 vstep = 0.5 vfinal = 5 name = drain
 log off
 
 solve init
-solve vgate = 0 vstep = 0.1 vfinal = 0.9 name = gate
+solve vgate = 0 vstep = 0.1 vfinal = 1.5 name = gate
 
-log outf = scl_'$file'_vd_out_at_vg_09V.dat
-solve vdrain =0 vstep = 0.5 vfinal = 5 name = drain
+log outf = scl_'$file'_vd_out_at_vg_15V.dat
+solve vdrain=0.003125
+solve vdrain=0.00625
+solve vdrain=0.0125
+solve vdrain = 0.025
+solve vdrain=0.05
+solve vdrain=0.10
+solve vdrain=0.20 
+solve vdrain=0.30
+solve vdrain =0.5 vstep = 0.5 vfinal = 5 name = drain
 log off
 
 solve init
-solve vgate = 0 vstep = 0.1 vfinal = 1.2 name = gate
+solve vgate = 0 vstep = 0.1 vfinal = 2 name = gate
 
-log outf = scl_'$file'_vd_out_at_vg_12V.dat
-solve vdrain =0 vstep = 0.5 vfinal = 5 name = drain
+log outf = scl_'$file'_vd_out_at_vg_20V.dat
+solve vdrain=0.003125
+solve vdrain=0.00625
+solve vdrain=0.0125
+solve vdrain = 0.025
+solve vdrain=0.05
+solve vdrain=0.10
+solve vdrain=0.20 
+solve vdrain=0.30
+solve vdrain =0.5 vstep = 0.5 vfinal = 5 name = drain
 log off
 
 #Progressing variables
@@ -159,6 +213,7 @@ set drive_time = $drive_time / $alpha
 set junc_dep = $junc_dep / $beta
 set chan_doping = $chan_doping * $delta
 set elec_doping = $elec_doping * $delta
+set energy = $energy / $beta
 set file = $file / 2
 
 l.end
