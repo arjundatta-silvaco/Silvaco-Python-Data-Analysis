@@ -37,7 +37,7 @@ def read_idvg(filename):
 # FUNCTION: THRESHOLD VOLTAGE EXTRACTION
 # =========================================================
 
-def extract_Vt(vg, id_data):
+def extract_vth_slope(vg, id_data):
 
     vg = np.array(vg)
     id_data = np.array(id_data)
@@ -82,6 +82,40 @@ def extract_Vt(vg, id_data):
 
     return Vt
 
+def extract_vth_value(vg, id_data):
+
+    Ith = 1e-5  # A
+
+    vg = np.array(vg)
+    id_abs = np.abs(id_data)
+
+    if np.max(id_abs) < Ith:
+        return None
+
+    # Sort in case data isn't ordered
+    idx = np.argsort(vg)
+
+    vg = vg[idx]
+    id_abs = id_abs[idx]
+
+    # Find first crossing of Ith
+    for i in range(1, len(vg)):
+
+        if id_abs[i-1] < Ith and id_abs[i] >= Ith:
+
+            x1 = vg[i-1]
+            x2 = vg[i]
+
+            y1 = id_abs[i-1]
+            y2 = id_abs[i]
+
+            # Linear interpolation
+            vth = x1 + (Ith - y1) * (x2 - x1) / (y2 - y1)
+
+            return vth
+
+    return None
+
 # =========================================================
 # FILE LIST
 # =========================================================
@@ -100,6 +134,7 @@ files = [
 
 plt.figure(figsize=(8,6))
 
+print("Using slope method:")
 for file in files:
 
     # Read data
@@ -109,13 +144,29 @@ for file in files:
     plt.plot(vg, id_data, linewidth=2, label=file)
 
     # Extract threshold voltage
-    Vt = extract_Vt(vg, id_data)
+    Vt = extract_vth_slope(vg, id_data)
 
     # Print result
     if Vt is not None:
         print(f"{file} --> Vt = {Vt:.4f} V")
     else:
-        print(f"{file} --> Vt extraction failed")
+        print(f"{file} --> Vt is negative")
+
+print(" ")
+print("Using fixed current value method:")
+for file in files:
+
+    # Read data
+    vg, id_data = read_idvg(file)
+
+    # Extract threshold voltage
+    Vth = extract_vth_value(vg, id_data)
+
+    # Print result
+    if Vth is not None:
+        print(f"{file} --> Vth = {Vth:.4f} V")
+    else:
+        print(f"{file} --> Vth is negative")
 
 # =========================================================
 # PLOT SETTINGS

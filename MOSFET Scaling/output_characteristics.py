@@ -37,42 +37,42 @@ def read_idvd(filename):
 
 mosfet1_files = [
     "scl_1_vd_out_at_vg_00V.dat",
-    "scl_1_vd_out_at_vg_03V.dat",
-    "scl_1_vd_out_at_vg_06V.dat",
-    "scl_1_vd_out_at_vg_09V.dat",
-    "scl_1_vd_out_at_vg_12V.dat"
+    "scl_1_vd_out_at_vg_05V.dat",
+    "scl_1_vd_out_at_vg_10V.dat",
+    "scl_1_vd_out_at_vg_15V.dat",
+    "scl_1_vd_out_at_vg_20V.dat"
 ]
 
 mosfet2_files = [
     "scl_0.5_vd_out_at_vg_00V.dat",
-    "scl_0.5_vd_out_at_vg_03V.dat",
-    "scl_0.5_vd_out_at_vg_06V.dat",
-    "scl_0.5_vd_out_at_vg_09V.dat",
-    "scl_0.5_vd_out_at_vg_12V.dat"
+    "scl_0.5_vd_out_at_vg_05V.dat",
+    "scl_0.5_vd_out_at_vg_10V.dat",
+    "scl_0.5_vd_out_at_vg_15V.dat",
+    "scl_0.5_vd_out_at_vg_20V.dat"
 ]
 
 mosfet3_files = [
     "scl_0.25_vd_out_at_vg_00V.dat",
-    "scl_0.25_vd_out_at_vg_03V.dat",
-    "scl_0.25_vd_out_at_vg_06V.dat",
-    "scl_0.25_vd_out_at_vg_09V.dat",
-    "scl_0.25_vd_out_at_vg_12V.dat"
+    "scl_0.25_vd_out_at_vg_05V.dat",
+    "scl_0.25_vd_out_at_vg_10V.dat",
+    "scl_0.25_vd_out_at_vg_15V.dat",
+    "scl_0.25_vd_out_at_vg_20V.dat"
 ]
 
 mosfet4_files = [
     "scl_0.125_vd_out_at_vg_00V.dat",
-    "scl_0.125_vd_out_at_vg_03V.dat",
-    "scl_0.125_vd_out_at_vg_06V.dat",
-    "scl_0.125_vd_out_at_vg_09V.dat",
-    "scl_0.125_vd_out_at_vg_12V.dat"
+    "scl_0.125_vd_out_at_vg_05V.dat",
+    "scl_0.125_vd_out_at_vg_10V.dat",
+    "scl_0.125_vd_out_at_vg_15V.dat",
+    "scl_0.125_vd_out_at_vg_20V.dat"
 ]
 
 mosfet5_files = [
     "scl_0.0625_vd_out_at_vg_00V.dat",
-    "scl_0.0625_vd_out_at_vg_03V.dat",
-    "scl_0.0625_vd_out_at_vg_06V.dat",
-    "scl_0.0625_vd_out_at_vg_09V.dat",
-    "scl_0.0625_vd_out_at_vg_12V.dat"
+    "scl_0.0625_vd_out_at_vg_05V.dat",
+    "scl_0.0625_vd_out_at_vg_10V.dat",
+    "scl_0.0625_vd_out_at_vg_15V.dat",
+    "scl_0.0625_vd_out_at_vg_20V.dat"
 ]
 
 
@@ -95,10 +95,10 @@ all_mosfets = {
 
 gate_labels = [
     "Vg = 0 V",
-    "Vg = 0.3 V",
-    "Vg = 0.6 V",
-    "Vg = 0.9 V",
-    "Vg = 1.2 V"
+    "Vg = 0.5 V",
+    "Vg = 1.0 V",
+    "Vg = 1.5 V",
+    "Vg = 2.0 V"
 ]
 
 
