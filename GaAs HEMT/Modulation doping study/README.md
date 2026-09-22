@@ -2,7 +2,7 @@ Comparative study of presence versus absence of modulation doping in GaAs HEMT
 
 # Silvaco Simulations
 
-This folder contains ATHENA and ATLAS simulations for GaAs HEMT
+This folder contains ATLAS simulations for GaAs HEMT's modulation doping study
 
 Absence of modulation doping shows drain current of the magnitude 1E-17, only noise.
 

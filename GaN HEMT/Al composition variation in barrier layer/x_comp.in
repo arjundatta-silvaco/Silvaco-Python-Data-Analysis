@@ -1,0 +1,136 @@
+#Initializing variables
+set xmax = 10
+set spacing = 0.05
+set xcomp = 0.3
+set barrier = 15
+set gate_mid = 5
+set barrier_end = 0.1 + ($barrier * 0.001)
+set channel_height = $barrier_end + (70*0.001)
+set file = 1
+set pol = 0.6
+
+#Starting loop
+loop steps = 3
+
+go atlas simflags = "-P 8"
+
+#Defining structure
+mesh width = 1000
+
+x.mesh loc = 0 spac = $spacing*10
+x.mesh loc = 0.5 spac = $spacing
+x.mesh loc = $xmax * 0.25 spac = $spacing*10
+x.mesh loc = $gate_mid - 0.5 spac = $spacing*2
+x.mesh loc = $gate_mid + 0.5 spac = $spacing*2
+x.mesh loc = $xmax * 0.75 spac = $spacing*10
+x.mesh loc = $xmax - 0.5 spac = $spacing*2
+x.mesh loc = $xmax spac = $spacing*10
+
+y.mesh loc = 0 spac = $spacing
+y.mesh loc = 0.1 spac = $spacing
+y.mesh loc = $barrier_end / 2 spac = $spacing / 10
+y.mesh loc = $barrier_end spac = $spacing / 10
+y.mesh loc = $channel_height / 2 spac = $spacing / 10
+y.mesh loc = $channel_height spac = $spacing / 10
+y.mesh loc = 2 spac = 1
+
+region number=1 y.min = 0 y.max = 0.1 material = nitride
+region number=2 y.min = 0.1 y.max = $barrier_end material = algan x.comp = $xcomp
+region number=3 y.min = $barrier_end y.max = $channel_height material = gan
+region number=4 y.min = $channel_height material = gan substrate
+
+electrode number = 1 name = gate x.min = $gate_mid - 0.5 x.max = $gate_mid + 0.5 y.min = 0 y.max = 0.1
+electrode number = 2 name = source x.min = $xmax - 0.5 x.max = $xmax y.min = 0 y.max = $barrier_end + 0.03
+electrode number = 3 name = drain x.min = 0 x.max = 0.5 y.min = 0 y.max = $barrier_end + 0.03
+electrode number = 4 name = substrate bottom
+
+models consrh auger fermi print temp=300
+mobility GaNsat.n 
+models lat.temp ni.fermi
+mobility albrct.n
+model polarization polar.scale=$pol calc.strain
+
+contact name=gate workfunc=5.2
+contact name=source workfunc=4.04
+contact name=drain  workfunc=4.04
+
+trap region=3 donor e.level=3.2 density=1.27e18 sign=1e-15 sigp=1e-15 degen=2
+trap region=3 acceptor e.level=0.36 density=7e17 sign=1e-15 sigp=1e-15 degen=4
+
+thermcontact num=1 name=substrate alpha=2500
+
+method newton climit=1e-4 maxtraps=10 itlimit=30  
+
+output band.param con.band val.band charge polar.charge qss e.field
+
+solve init
+solve previous
+save outfile=x_comp_'$file'.str
+
+#Start characterization
+solve vdrain=0.1
+solve vdrain=0.5 vstep=0.5 vfinal=10 name=drain
+solve vgate=-0.1
+solve vgate=-0.5 vstep=-0.5 vfinal=-7 name=gate
+log outfile=x_comp_idvg_'$file'.log
+solve previous
+solve vstep=0.2 vfinal=7 name=gate
+
+log off
+
+solve init
+solve previous
+
+solve vgate=0.5 
+solve vgate=1 outf=x_comp_vg1v
+solve vgate=1.5
+solve vgate=2
+solve vgate=2.5
+solve vgate=3 outf=x_comp_vg3v
+solve vgate=3.5
+solve vgate=4
+solve vgate=4.5
+solve vgate=5 outf=x_comp_vg5v
+
+solve init
+load inf=x_comp_vg1v
+log outf=x_comp_'$file'_vg1v.log
+solve vdrain=0.001
+solve vdrain=0.01
+solve vdrain=0.1
+solve vdrain=0.25
+solve vdrain=0.5
+solve vstep=0.5 vfinal=20 name=drain
+
+solve init
+load inf=x_comp_vg3v
+log outf=x_comp_'$file'_vg3v.log
+solve vdrain=0.001
+solve vdrain=0.01
+solve vdrain=0.1
+solve vdrain=0.25
+solve vdrain=0.5
+solve vstep=0.5 vfinal=20 name=drain
+
+solve init
+load inf=x_comp_vg5v
+log outf=x_comp_'$file'_vg5v.log
+solve vdrain=0.001
+solve vdrain=0.01
+solve vdrain=0.1
+solve vdrain=0.25
+solve vdrain=0.5
+solve vstep=0.5 vfinal=20 name=drain
+log off
+
+set xcomp = $xcomp + 0.1
+set file = $file + 1
+
+l.end
+
+tonyplot -overlay x_comp_idvg_1.log x_comp_idvg_2.log x_comp_idvg_3.log
+tonyplot -overlay x_comp_1_vg1v.log x_comp_1_vg3v.log x_comp_1_vg5v.log
+tonyplot -overlay x_comp_2_vg1v.log x_comp_2_vg3v.log x_comp_2_vg5v.log
+tonyplot -overlay x_comp_3_vg1v.log x_comp_3_vg3v.log x_comp_3_vg5v.log
+tonyplot -overlay x_comp_1_vg1v.log x_comp_2_vg1v.log x_comp_3_vg1v.log
+quit
