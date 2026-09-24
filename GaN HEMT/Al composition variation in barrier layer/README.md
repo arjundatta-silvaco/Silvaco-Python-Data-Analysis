@@ -1,12 +1,12 @@
-Analyzing the change brought by varying the Al composition in the barrier layer
+# Analyzing the change brought by varying the Al composition in the barrier layer
 
-# Silvaco Simulations
+## Silvaco Simulations
 
 This folder contains ATLAS simulations for GaN HEMT
 
 Al composition was changed using the variable list given on top and near the l.end statement
 
-# Cutline dat files
+## Cutline dat files
 1) Open str file in TonyPlot
 2) Take a cutline of required area
 3) Go to file and click export
@@ -14,7 +14,7 @@ Al composition was changed using the variable list given on top and near the l.e
 5) Change the name of the file from the default 'export' to a desired name
 6) Put the name of file in x_comp_conc_cb.py python code
 
-# Python Data Analysis
+## Python Data Analysis
 
 Scripts for plotting and analyzing Silvaco simulation outputs.
 
