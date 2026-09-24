@@ -1,23 +1,25 @@
-Comparative study of presence versus absence of modulation doping in GaAs HEMT
+# Comparative study of presence versus absence of modulation doping in GaAs HEMT
 
-# Silvaco Simulations
+Blog posted here: https://semicon.world/2026/06/18/is-modulation-doping-required-for-gaas-hemt/
+
+## Silvaco Simulations
 
 This folder contains ATLAS simulations for GaAs HEMT's modulation doping study
 
 Absence of modulation doping shows drain current of the magnitude 1E-17, only noise.
 
-# Cutline dat files
+## Cutline dat files
 1) Open str file in TonyPlot
 2) Take a cutline of required area
-3) Do to file and click export
+3) Go to file and click export
 4) Select displayed only and tonyplot user data
 5) Change the name of the file from the default 'export' to a desired name
 6) Put the name of file in energy_band.py python code
 
-# Electron concentration Origin Plot
+## Electron concentration Origin Plot
 Use origin for the file 'gaas_hemt_mod_doping.opju'
 
-# Python Data Analysis
+## Python Data Analysis
 
 Scripts for plotting and analyzing Silvaco simulation outputs.
 
