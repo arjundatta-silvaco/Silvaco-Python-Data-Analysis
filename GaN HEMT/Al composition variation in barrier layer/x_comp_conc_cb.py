@@ -4,8 +4,10 @@ from pathlib import Path
 
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg,
+    NavigationToolbar2Tk
+)
 
 # =========================================================
 # SETTINGS
@@ -251,6 +253,13 @@ def make_canvas(parent, figure):
     )
 
     canvas.draw()
+
+    toolbar = NavigationToolbar2Tk(
+        canvas,
+        parent
+    )
+
+    toolbar.update()
 
     canvas.get_tk_widget().pack(
         fill=tk.BOTH,
