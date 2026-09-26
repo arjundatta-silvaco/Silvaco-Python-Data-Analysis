@@ -1,7 +1,7 @@
 # Welcome to using Python to analyze Silvaco I-V characteristics.
 
 Check out my blog: https://semicon.world/ <br>
-Support the blog and the GitHub: razorpay.me/@semiconworld
+Support the blog and the GitHub: https://razorpay.me/@semiconworld
 
 ## License Notice: This repository is provided for personal study and educational reference. Research publication, commercial use, redistribution, and reuse of repository contents require prior permission. See the LICENSE file for details.
 
