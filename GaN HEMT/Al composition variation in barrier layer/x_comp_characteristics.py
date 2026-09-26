@@ -409,18 +409,21 @@ def plot_idvg(tab):
             return
 
     ax.set_title(
-        "ID-VG Comparison for Different AlGaN Compositions"
+        "ID-VG Comparison for Different AlGaN Compositions",
+        fontsize = 20
     )
 
     ax.set_xlabel(
-        "Gate Voltage, $V_G$ (V)"
+        "Gate Voltage, $V_G$ (V)",
+        fontsize = 18
     )
 
     ax.set_ylabel(
-        "Drain Current, $I_D$ (A)"
+        "Drain Current, $I_D$ (A)",
+        fontsize = 18
     )
 
-    ax.legend()
+    ax.legend(fontsize = 15)
 
     add_grid(ax)
 
@@ -488,18 +491,21 @@ def plot_all_idvd(tab):
                 continue
 
         ax.set_title(
-            f"AlGaN $x$ = {xcomp:.1f}"
+            f"AlGaN $x$ = {xcomp:.1f}",
+            fontsize = 20
         )
 
         ax.set_xlabel(
-            "$V_D$ (V)"
+            "$V_D$ (V)",
+            fontsize = 18
         )
 
         ax.set_ylabel(
-            "$I_D$ (A)"
+            "$I_D$ (A)",
+            fontsize = 18
         )
 
-        ax.legend()
+        ax.legend(fontsize = 15)
 
         add_grid(ax)
 
@@ -574,18 +580,21 @@ def plot_idvd_comparisons(tab):
                 continue
 
         ax.set_title(
-            f"$V_G$ = {vg} V"
+            f"$V_G$ = {vg} V",
+            fontsize = 20
         )
 
         ax.set_xlabel(
-            "$V_D$ (V)"
+            "$V_D$ (V)",
+            fontsize = 18
         )
 
         ax.set_ylabel(
-            "$I_D$ (A)"
+            "$I_D$ (A)",
+            fontsize = 18
         )
 
-        ax.legend()
+        ax.legend(fontsize = 15)
 
         add_grid(ax)
 
@@ -662,33 +671,39 @@ def plot_gate_current(tab):
             return
 
     axes[0].set_title(
-        "Gate Current vs Gate Voltage"
+        "Gate Current vs Gate Voltage",
+        fontsize = 20
     )
 
     axes[0].set_xlabel(
-        "Gate Voltage, $V_G$ (V)"
+        "Gate Voltage, $V_G$ (V)",
+        fontsize = 18
     )
 
     axes[0].set_ylabel(
-        "Gate Current, $I_G$ (A)"
+        "Gate Current, $I_G$ (A)",
+        fontsize = 18
     )
 
-    axes[0].legend()
+    axes[0].legend(fontsize = 15)
     add_grid(axes[0])
 
     axes[1].set_title(
-        "Gate Current vs Gate Voltage (Log Scale)"
+        "Gate Current vs Gate Voltage (Log Scale)",
+        fontsize = 20
     )
 
     axes[1].set_xlabel(
-        "Gate Voltage, $V_G$ (V)"
+        "Gate Voltage, $V_G$ (V)",
+        fontsize = 18
     )
 
     axes[1].set_ylabel(
-        "$|I_G|$ (A)"
+        "$|I_G|$ (A)",
+        fontsize = 18
     )
 
-    axes[1].legend()
+    axes[1].legend(fontsize = 15)
     add_grid(axes[1])
 
     fig.suptitle(
@@ -954,18 +969,21 @@ def plot_breakdown(tab):
     )
 
     ax.set_title(
-        "HEMT Breakdown Characteristics"
+        "HEMT Breakdown Characteristics",
+        fontsize = 20
     )
 
     ax.set_xlabel(
-        "Drain Voltage, $V_D$ (V)"
+        "Drain Voltage, $V_D$ (V)",
+        fontsize = 18
     )
 
     ax.set_ylabel(
-        "Drain Current, $I_D$ (A)"
+        "Drain Current, $I_D$ (A)",
+        fontsize = 18
     )
 
-    ax.legend()
+    ax.legend(fontsize = 15)
 
     add_grid(ax)
 

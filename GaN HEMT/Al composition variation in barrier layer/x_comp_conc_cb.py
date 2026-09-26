@@ -365,19 +365,22 @@ def plot_conduction_band(tab):
         )
 
     ax.set_title(
-        "Conduction Band Energy Profile"
+        "Conduction Band Energy Profile",
+        fontsize=20
     )
 
     ax.set_xlabel(
-        x_axis_label()
+        x_axis_label(),
+        fontsize = 18
     )
 
     ax.set_ylabel(
-        "Energy (eV)"
+        "Energy (eV)",
+        fontsize = 18
     )
 
     if files_found:
-        ax.legend()
+        ax.legend(fontsize = 15)
 
     add_grid(ax)
 
@@ -479,15 +482,18 @@ def plot_electron_concentration(tab):
         ax.set_ylim(bottom=CONC_LOG_YMIN)
 
     ax.set_title(
-        "Electron Concentration Profile"
+        "Electron Concentration Profile",
+        fontsize = 20
     )
 
     ax.set_xlabel(
-        x_axis_label()
+        x_axis_label(),
+        fontsize = 18
     )
 
     ax.set_ylabel(
-        "Electron Concentration (cm$^{-3}$)"
+        "Electron Concentration (cm$^{-3}$)",
+        fontsize = 18
     )
 
     if files_found:
